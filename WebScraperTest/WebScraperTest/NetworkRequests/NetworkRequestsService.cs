@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,17 +18,12 @@ namespace WebScraperTest.NetworkRequests
         /// <returns>The stream data of the html request</returns>
         public StreamReader GetResponseData(string url)
         {
-            HttpClient client = new HttpClient();
-            HttpResponseMessage responseMsg = client.GetAsync(url).Result;
-            Task<string> responseBody = responseMsg.Content.ReadAsStringAsync();
-            
-            responseBody.Wait();
-            
-            var res = responseBody.Result;
-            byte[] byteArray = Encoding.ASCII.GetBytes(res);
-            MemoryStream stream = new MemoryStream(byteArray);
-            
-            return new StreamReader(stream);
+            var webRequest = HttpWebRequest.Create(url);
+            var response = (HttpWebResponse)webRequest.GetResponse();
+
+            Stream stream = response.GetResponseStream();
+            var streamReader = new StreamReader(stream);
+            return streamReader;
         }
     }
 

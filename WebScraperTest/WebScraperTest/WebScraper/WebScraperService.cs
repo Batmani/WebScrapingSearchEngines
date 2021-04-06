@@ -93,6 +93,7 @@ namespace WebScraperTest.WebScraper
             htmlDocument = new HtmlDocument();
             htmlDocument.OptionFixNestedTags = true;
             htmlDocument.Load(htmlStream);
+            htmlStream.Close();
         }
 
         /// <summary>
